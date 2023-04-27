@@ -1,0 +1,76 @@
+--1. Создать таблицу users. Должна позволять сохранить имя, фамилию,
+-- номер телефона и пол.
+CREATE TABLE users (id INTEGER PRIMARY KEY, first_name VARCHAR, second_name VARCHAR,
+                    phone_number VARCHAR, gender VARCHAR);
+
+--2. Создать таблицу devices.
+-- Должна позволять хранить название, мак адрес.
+-- Каждій девайс должен біть связан с конкретнім пользователем.
+-- Пользователь может обладать множеством девайсов.
+
+CREATE TABLE devices (dev_id INTEGER PRIMARY KEY, dev_name VARCHAR, dev_model VARCHAR,
+                      mac_adress VARCHAR,
+                      affiliation INTEGER REFERENCES users (id)) ;
+
+--3. Добавить несколько пользователей.
+INSERT INTO users VALUES (0001, 'Olena', 'Huterevych','+380977777777', 'Female');
+INSERT INTO users VALUES (0002, 'Margo', 'Huterevych','+380973333333', 'Female');
+INSERT INTO users VALUES (0003, 'Alice', 'Huterevych','+380975555555', 'Female');
+INSERT INTO users VALUES (0004, 'Vitaliy', 'Huterevych','+380671111111', 'Male');
+INSERT INTO users VALUES (0005, 'Max', 'Shevchenko','+380632222222', 'Male');
+INSERT INTO users VALUES (0006, 'Ivan', 'Kot','+380504444444', 'Male');
+INSERT INTO users VALUES (0007, 'Olena', 'Dieva','+380638888888', 'Female');
+
+--4. Добавить несколько девайсов. Некоторіе пользователи должні иметь по несколько девайсов.
+INSERT INTO devices VALUES (001, 'Lenovo', 'IdeaPad 1 15ADA7','MM-7C-1E-68-3D-44', 1);
+INSERT INTO devices VALUES (002, 'ASUS', 'VivoBook 15 OLED K513EA-L11653','MM-7C-1E-68-3D-48', 4);
+INSERT INTO devices VALUES (003, 'OPPO', 'Pad Air WiFi 128GB','MM-7C-1E-75-3D-44', 3);
+INSERT INTO devices VALUES (004, 'Apple', 'MacBook Air 13" M1 256GB 2020','KK-7C-1E-58-3D-21', 2);
+INSERT INTO devices VALUES (005, 'Acer', 'Aspire 3 A315-35-C654','CC-7H-1E-68-7U-59', 5);
+INSERT INTO devices VALUES (006, 'Samsung', 'Galaxy Tab A7 Lite LTE 64GB Grey ','CC-7H-1E-65-7U-60',7);
+INSERT INTO devices VALUES (007, 'Poco', 'C40 4/64GB','CC-7H-1E-68-7U-61', 6);
+INSERT INTO devices VALUES (008, 'Samsung', 'Galaxy A23 4/64GB','LC-7H-1E-68-7U-62', 5);
+INSERT INTO devices VALUES (009, 'Infinix ', 'Smart 6 2/32 GB','FF-7H-1E-68-7U-63', 3);
+INSERT INTO devices VALUES (010, 'Xiaomi ', 'Redmi 9A 2/32','LL-7H-1E-68-7U-64', 4);
+INSERT INTO devices VALUES (011, 'Xiaomi ', 'Redmi 8 2/32','CC-7H-1E-68-8H-65', 1);
+INSERT INTO devices VALUES (012, 'Motorola ', 'G32 6/128GB','LI-7H-1E-68-9M-66', 2);
+INSERT INTO devices VALUES (013, 'Lenovo', 'Tab M10 FHD Plus','BB-7H-1U-68-6D-67', 1);
+
+--5. Прочитать всех пользователей.
+SELECT * FROM users;
+
+--6. Прочитать всех пользователей в отсортированном по имени виде.
+SELECT * FROM users ORDER BY first_name;
+
+--7. Прочитать всех пользователей, у которіх имя = Olena
+SELECT * FROM users WHERE first_name = 'Olena';
+
+--8. Прочитать всех пользователей с 0 <= id <= 100.
+SELECT * FROM users WHERE id BETWEEN 0 AND 100;
+
+--9. Прочитать всех пользователей, у которіх номер телефона начинается на +38097
+SELECT * FROM users WHERE SUBSTRING(phone_number for 6) = '+38097';
+
+--10. Прочитать максимальній id пользователя.
+SELECT MAX(id) AS max_id FROM users;
+
+--11. Прочитать всех пользователей и девайсі одновременно.
+SELECT * FROM users INNER JOIN devices d on users.id = d.affiliation ORDER BY id;
+
+--12. * Прочитать всех пользователей и кол-во их девайсов, 
+-- отсортированными по кол-ву девайсов(вначале - те, у кого больше).
+SELECT id, first_name, count(affiliation) FROM users
+    INNER JOIN devices d on users.id = d.affiliation
+    GROUP BY id
+    ORDER BY count(affiliation) DESC;
+
+
+
+
+
+
+
+
+
+
+
